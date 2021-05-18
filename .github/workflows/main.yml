@@ -20,22 +20,33 @@ jobs:
           bundler-cache: true
       - name: Run tests
         run: bin/rspec
-      - name: Upload Code Coverage artifact
-        uses: actions/upload-artifact@v2
+      - name: Cache code coverage reports
+        uses: actions/cache@v2
         with:
-          name: code-coverage
-          path: coverage/
+          path: |
+            coverage/.last_run.json
+            coverage/.resultset.json
+          key: ${{ runner.os }}-simplecov-report-${{ github.ref }}
   coverage:
     name: Coverage
     needs: tests
     runs-on: ubuntu-latest
     steps:
-      - name: Download Code Coverage artifact
-        uses: actions/download-artifact@v2
+      - name: Get cached code coverage reports
+        uses: actions/cache@v2
         with:
-          name: code-coverage
-          path: coverage/
+          path: |
+            coverage/.last_run.json
+            coverage/.resultset.json
+          key: ${{ runner.os }}-simplecov-report-${{ github.ref }}
+      - name: Get head cached code coverage reports
+        uses: actions/cache@v2
+        with:
+          path: |
+            coverage-head/.last_run.json
+            coverage-head/.resultset.json
+          key: ${{ runner.os }}-simplecov-report-${{ github.head_ref }}
       - name: Ruby Simplecov Report
         uses: D1ceWard/ruby-simplecov-action@master
         with:
-          token: "${{ secrets.GITHUB_TOKEN }}"
+          token: ${{ secrets.GITHUB_TOKEN }}
