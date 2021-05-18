@@ -8,4 +8,10 @@ RSpec.describe Example do
       expect(test_object.hellow_method).to eq("Hello world")
     end
   end
+
+  describe '#another_test' do
+    it 'return correct string' do
+      expect(test_object.hellow_method).to eq("Hello world 2")
+    end
+  end
 end
