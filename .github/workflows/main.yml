@@ -38,12 +38,12 @@ jobs:
       - name: Upload coverage reports
         uses: actions/upload-artifact@v2
         with:
-          name: coverage-reports
+          name: base-coverage-reports
           path: |
             coverage/.last_run.json
             coverage/.resultselt.json
-  tests:
-    name: Tests
+  head-tests:
+    name: Head tests
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
@@ -57,13 +57,13 @@ jobs:
       - name: Upload coverage reports
         uses: actions/upload-artifact@v2
         with:
-          name: coverage-reports
+          name: head-coverage-reports
           path: |
             coverage/.last_run.json
             coverage/.resultselt.json
   coverage:
     name: Coverage
-    needs: [tests, base-tests]
+    needs: [base-tests, head-tests]
     runs-on: ubuntu-latest
     steps:
       - name: Download base coverage reports
