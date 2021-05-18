@@ -8,6 +8,40 @@ on:
       - opened
       - synchronize
 jobs:
+  base-tests:
+    name: Base tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+        with:
+          ref: ${{ github.base_ref }}
+      - name: Get base commit sha
+        id: base-commit
+        run: echo "::set-output name=sha::$(git rev-parse HEAD)"
+      - name: Coverage reports caching
+        id: coverage-reports
+        uses: actions/cache@v2
+        with:
+          path: |
+            coverage/.last_run.json
+            coverage/.resultset.json
+          key: coverage-reports-${{ steps.base-commit.output.sha }}
+      - name: Setup Ruby
+        if: steps.coverage-reports.outputs.cache-hit != 'true'
+        uses: ruby/setup-ruby@v1
+        with:
+          bundler-cache: true
+      - name: Run tests
+        if: steps.coverage-reports.outputs.cache-hit != 'true'
+        run: bin/rspec
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v2
+        with:
+          name: coverage-reports
+          path: |
+            coverage/.last_run.json
+            coverage/.resultselt.json
   tests:
     name: Tests
     runs-on: ubuntu-latest
@@ -20,32 +54,26 @@ jobs:
           bundler-cache: true
       - name: Run tests
         run: bin/rspec
-      - name: Cache code coverage reports
-        uses: actions/cache@v2
+      - name: Upload coverage reports
+        uses: actions/upload-artifact@v2
         with:
+          name: coverage-reports
           path: |
             coverage/.last_run.json
-            coverage/.resultset.json
-          key: ${{ runner.os }}-simplecov-report-${{ github.ref }}
+            coverage/.resultselt.json
   coverage:
     name: Coverage
-    needs: tests
+    needs: [tests, base-tests]
     runs-on: ubuntu-latest
     steps:
-      - name: Get cached code coverage reports
-        uses: actions/cache@v2
+      - name: Download base coverage reports
+        uses: actions/download-artifact@v2
         with:
-          path: |
-            coverage/.last_run.json
-            coverage/.resultset.json
-          key: ${{ runner.os }}-simplecov-report-${{ github.ref }}
-      - name: Get head cached code coverage reports
-        uses: actions/cache@v2
+          name: base-coverage-reports
+      - name: Download head coverage reports
+        uses: actions/download-artifact@v2
         with:
-          path: |
-            coverage-head/.last_run.json
-            coverage-head/.resultset.json
-          key: ${{ runner.os }}-simplecov-report-${{ github.head_ref }}
+          name: head-coverage-reports
       - name: Ruby Simplecov Report
         uses: D1ceWard/ruby-simplecov-action@master
         with:
