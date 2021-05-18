@@ -11,7 +11,7 @@ RSpec.describe Example do
 
   describe '#another_test' do
     it 'return correct string' do
-      expect(test_object.hellow_method).to eq("Hello world 2")
+      expect(test_object.another_test).to eq("Hello world 2")
     end
   end
 end
