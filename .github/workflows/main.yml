@@ -36,4 +36,4 @@ jobs:
           name: code-coverage
           path: coverage/
       - name: Ruby Simplecov Report
-        uses: D1ceWard/ruby-simplecov-action
+        uses: D1ceWard/ruby-simplecov-action@master
