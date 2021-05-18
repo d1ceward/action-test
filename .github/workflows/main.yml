@@ -37,3 +37,5 @@ jobs:
           path: coverage/
       - name: Ruby Simplecov Report
         uses: D1ceWard/ruby-simplecov-action@master
+        with:
+          token: "${{ secrets.GITHUB_TOKEN }}"
