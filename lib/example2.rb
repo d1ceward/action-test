@@ -1,4 +1,4 @@
-class Example
+class Example2
   def hellow_method
     'Hello world'
   end
