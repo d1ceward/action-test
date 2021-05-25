@@ -1,4 +1,6 @@
 require 'simplecov'
+require './lib/example'
+require './lib/example2'
 
 SimpleCov.start('rails') do
   add_filter('/admin/')

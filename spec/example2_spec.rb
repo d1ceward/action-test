@@ -1,4 +1,4 @@
-require 'example'
+require './spec/spec_helper'
 
 RSpec.describe Example2 do
   let(:test_object) { Example2.new}
