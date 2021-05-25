@@ -80,6 +80,11 @@ jobs:
           path: |
             head-coverage-reports/.last_run.json
             head-coverage-reports/.resultset.json
+      - name: Test
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-upload
+          path: head-coverage-reports
       - name: Ruby Simplecov Report
         uses: D1ceWard/ruby-simplecov-action@master
         with:
