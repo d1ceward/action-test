@@ -1,6 +1,4 @@
 require 'simplecov'
-require './lib/example'
-require './lib/example2'
 
 SimpleCov.start('rails') do
   add_filter('/admin/')
@@ -17,3 +15,6 @@ RSpec.configure do |config|
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
 end
+
+require './lib/example'
+require './lib/example2'
