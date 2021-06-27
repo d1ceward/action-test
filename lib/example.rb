@@ -10,4 +10,8 @@ class Example
   def another_another_test
     'Hello world 3'
   end
+
+  def another_another_another_test
+    'Hello world 4'
+  end
 end
