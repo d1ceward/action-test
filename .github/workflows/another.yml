@@ -20,3 +20,5 @@ jobs:
         uses: D1ceWard/random-assignee-action@master
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          assignee-list: |
+            d1ceward
