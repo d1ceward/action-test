@@ -1,0 +1,22 @@
+name: Another one
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - ready_for_review
+      - synchronize
+  issues:
+    types:
+      - opened
+      - edited
+jobs:
+  random-assignee:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Random assignee
+        uses: D1ceWard/random-assignee-action@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
