@@ -8,6 +8,10 @@ on:
       - opened
       - ready_for_review
       - synchronize
+  issues:
+    types:
+      - opened
+      - edited
 jobs:
   random-assignee:
     runs-on: ubuntu-latest
