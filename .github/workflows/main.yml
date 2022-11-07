@@ -1,86 +1,14 @@
 name: Main
 on:
   push:
+    tags:
+      - 'v*'
     branches:
-      - master
-  pull_request:
-    types:
-      - opened
-      - synchronize
+      - release-test
 jobs:
-  base-tests:
-    name: Base tests
+  release-test:
+    name: Release-test
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-        with:
-          ref: ${{ github.base_ref }}
-      - name: Get base commit sha
-        id: base-commit
-        run: echo "::set-output name=sha::$(git rev-parse HEAD)"
-      - name: Coverage reports caching
-        id: coverage-reports
-        uses: actions/cache@v2
-        with:
-          path: |
-            coverage/.last_run.json
-            coverage/.resultset.json
-          key: coverage-reports-${{ steps.base-commit.output.sha }}
-      - name: Setup Ruby
-        if: steps.coverage-reports.outputs.cache-hit != 'true'
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-      - name: Run tests
-        if: steps.coverage-reports.outputs.cache-hit != 'true'
-        run: bin/rspec
-      - name: Upload coverage reports
-        uses: actions/upload-artifact@v2
-        with:
-          name: base-coverage-reports
-          path: |
-            coverage/.last_run.json
-            coverage/.resultset.json
-  head-tests:
-    name: Head tests
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-      - name: Setup Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          bundler-cache: true
-      - name: Run tests
-        run: bin/rspec
-      - name: Upload coverage reports
-        uses: actions/upload-artifact@v2
-        with:
-          name: head-coverage-reports
-          path: |
-            coverage/.last_run.json
-            coverage/.resultset.json
-  coverage:
-    name: Coverage
-    needs: [base-tests, head-tests]
-    runs-on: ubuntu-latest
-    steps:
-      - name: Download base coverage reports
-        uses: actions/download-artifact@v2
-        with:
-          name: base-coverage-reports
-          path: |
-            base-coverage-reports/.last_run.json
-            base-coverage-reports/.resultset.json
-      - name: Download head coverage reports
-        uses: actions/download-artifact@v2
-        with:
-          name: head-coverage-reports
-          path: |
-            head-coverage-reports/.last_run.json
-            head-coverage-reports/.resultset.json
-      - name: Ruby Simplecov Report
-        uses: D1ceWard/ruby-simplecov-action@master
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Test upload release
+        uses: d1ceward/release-upload-action@master
