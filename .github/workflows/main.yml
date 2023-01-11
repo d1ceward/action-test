@@ -3,8 +3,6 @@ on:
   push:
     tags:
       - 'v*'
-    branches:
-      - release-test
 jobs:
   release-test:
     name: Release-test
@@ -13,7 +11,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
       - name: Test upload release
-        uses: d1ceward/draft-assets-release-action@505e0becef8ac058b4d52cff3f40d87af0c1cd8c
+        uses: d1ceward/draft-assets-release-action@develop
         with:
           files: Gemfile
           token: ${{ secrets.GITHUB_TOKEN }}
