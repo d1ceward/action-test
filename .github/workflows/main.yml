@@ -13,5 +13,7 @@ jobs:
       - name: Test upload release
         uses: d1ceward/draft-assets-release-action@develop
         with:
-          files: Gemfile
+          files: |
+            - Gemfile
+            - Gemfile.lock
           token: ${{ secrets.GITHUB_TOKEN }}
